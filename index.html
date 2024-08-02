@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수열 계산기</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
+        body {
+            font-family: "Do Hyeon", sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #bfcddf;
+        }
+        h1 {
+            text-align: center;
+            font-size: 40px;
+        }
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 20px;
+        }
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-family: "Do Hyeon", sans-serif;
+            border-width: 0.0001cap;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-family: "Do Hyeon", sans-serif;
+            font-size: 15px;
+            border-radius: 5px;
+        }
+        button {
+            padding: 20px 15px;
+            background-color: #457b9d;
+            color: #ffffff;
+            font-size: 17px;
+            border:none ;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: "Do Hyeon", sans-serif;
+        }
+        button:hover {
+            background-color: #457b9d;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>수열 계산기</h1>
+    <label for="sequenceType">수열 종류 선택:</label>
+    <select id="sequenceType" onchange="toggleInputs()">
+        <option value="arithmetic">등차수열</option>
+        <option value="geometric">등비수열</option>
+    </select>
+   
+    <label for="firstTerm">첫째항:</label>
+    <input type="number" id="firstTerm" required oninput="validateNumber(this)">
+
+    <label for="commonValue">공차 또는 공비:</label>
+    <input type="number" id="commonValue" required oninput="validateNumber(this)">
+
+    <label for="terms">항의 개수:</label>
+    <input type="number" id="terms" required oninput="validateNumber(this)">
+
+    <button onclick="calculateSequence()">수열 계산</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function toggleInputs() {
+    const sequenceType = document.getElementById('sequenceType').value;
+    const commonValueLabel = document.querySelector('label[for="commonValue"]');
+    commonValueLabel.textContent = sequenceType === 'arithmetic' ? '공차:' : '공비:';
+}
+
+function validateNumber(input) {
+    input.value = input.value.replace(/[^0-9.]/g, '');
+}
+
+function calculateSequence() {
+    const firstTerm = parseFloat(document.getElementById('firstTerm').value);
+    const commonValue = parseFloat(document.getElementById('commonValue').value);
+    const terms = parseInt(document.getElementById('terms').value);
+    let result = '';
+
+    if (document.getElementById('sequenceType').value === 'arithmetic') {
+        result += '등차수열: ';
+        let sum = 0;
+        for (let i = 0; i < terms; i++) {
+            const term = firstTerm + commonValue * i;
+            result += term + (i < terms - 1 ? ', ' : '');
+            sum += term;
+        }
+        result += `<br>수열의 합: ${sum}`;
+    } else {
+        result += '등비수열: ';
+        let sum = 0;
+        for (let i = 0; i < terms; i++) {
+            const term = firstTerm * Math.pow(commonValue, i);
+            result += term + (i < terms - 1 ? ', ' : '');
+            sum += term;
+        }
+        result += `<br>수열의 합: ${sum}`;
+    }
+
+    document.getElementById('result').innerHTML = result;
+}
+</script>
+
+</body>
+</html>
